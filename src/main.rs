@@ -62,133 +62,35 @@ async fn main() -> Result<(), reqwest::Error> {
         if let Some(district_id) = district_id {
             println!("District ID: {}", &district_id);
 
-            let (tx, mut rx) = mpsc::channel(16);            
+            let (tx, mut rx) = mpsc::channel(128);            
             let tx2 = tx.clone();
             let tx3 = tx.clone();
             let tx4 = tx.clone();
-            let age2 = age.clone();
-            let age3 = age.clone();
-            let age4 = age.clone();
-            let district_id2 = district_id.clone();
-            let district_id3 = district_id.clone();
-            let district_id4 = district_id.clone();
+            let txes = vec![tx, tx2, tx3, tx4];
 
-            tokio::spawn(async move {
-                loop {
-                    let local = Local::now();
-                    let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
-                        .await
-                        .unwrap()
-                        .json::<CentersResponse>()
-                        .await
-                        .unwrap();
-                    for center in &resp.centers {
-                        for session in &center.sessions  {
-                            if session.available_capacity > 0 {
-                                if age == 18 && session.min_age_limit == 18 {
-                                    tx.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                } else if age == 45 && session.min_age_limit == 45 {
-                                    tx.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                }  
+            let error_msg = "An error occured. Please mail this error message to contact@ieeevit.org, 
+                or open an issue at https://github.com/aryan9600/cowin-notifier/issues/new.";
+
+            let mut local = Local::now();
+            for tx in txes {
+                tokio::spawn(async move {
+                    loop {
+                        let date = local.format("%d-%m-%Y").to_string();
+                        let resp = get_centers(district_id, date).await.ok();
+                        if let Some(resp) = resp {
+                            let notifications = get_notifications(resp, age);
+                            for notif in notifications {
+                                match tx.send(notif).await {
+                                    Ok(()) => {},
+                                    Err(e) => log::error!("{} \n {}", error_msg, e)
+                                }
                             }
                         }
+                        sleep(tokio::time::Duration::from_secs(30)).await;
                     }
-                    sleep(tokio::time::Duration::from_secs(30)).await;
-                }
-            });
-
-            tokio::spawn(async move {
-                loop {
-                    let local = Local::now() + Duration::days(7);
-                    let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
-                        .await
-                        .unwrap()
-                        .json::<CentersResponse>()
-                        .await
-                        .unwrap();
-                    for center in &resp.centers {
-                        for session in &center.sessions  {
-                            if session.available_capacity > 0 {
-                                if age == 18 && session.min_age_limit == 18 {
-                                    tx2.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                } else if age == 45 && session.min_age_limit == 45 {
-                                    tx2.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                }  
-                            }
-                        }
-                    }
-                    sleep(tokio::time::Duration::from_secs(30)).await;
-                }
-            });
-
-            tokio::spawn(async move {
-                loop {
-                    let local = Local::now() + Duration::days(14);
-                    let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
-                        .await
-                        .unwrap()
-                        .json::<CentersResponse>()
-                        .await
-                        .unwrap();
-                    for center in &resp.centers {
-                        for session in &center.sessions  {
-                            if session.available_capacity > 0 {
-                                if age == 18 && session.min_age_limit == 18 {
-                                    tx3.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                } else if age == 45 && session.min_age_limit == 45 {
-                                    tx3.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                }  
-                            }
-                        }
-                    }
-                    sleep(tokio::time::Duration::from_secs(30)).await;
-                }
-            });
-
-            tokio::spawn(async move {
-                loop {
-                    let local = Local::now() + Duration::days(21);
-                    let date = local.format("%d-%m-%Y").to_string();
-                    let resp = get_centers(district_id, date).await.ok();
-                    if let Some(resp) = resp {
-                        let notifications = get_notifications(resp, age);
-                        for notif in notifications {
-                            match tx4.send(notif).await {
-                                Ok(()) => {},
-                                Err(e) => log::error!("An error occured: {}. \n Please mail this error message to contact@ieeevit.org, or open an issue at https://github.com/aryan9600/cowin-notifier/issues/new.", e)
-                            }
-                        }
-                    }
-                    sleep(tokio::time::Duration::from_secs(30)).await;
-                }
-            });
+                });
+                local = local + Duration::days(7);
+            }
 
             while let Some(message) = rx.recv().await {
                 use notify_rust::Notification;
