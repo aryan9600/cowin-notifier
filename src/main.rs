@@ -1,47 +1,15 @@
-use serde::{Deserialize, Serialize};
 use structopt::StructOpt;
 use chrono::{Local, Duration};
 use tokio::sync::mpsc;
 use tokio::time::sleep;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CentersResponse{
-    centers: Vec<Center>
-}
+mod district;
+mod state;
+mod center;
+mod notification;
+use notification::NotificationMessage;
+use center::CentersResponse;
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Center {
-    pub center_id: i64,
-    pub name: String,
-    pub address: String,
-    pub state_name: String,
-    pub district_name: String,
-    pub block_name: String,
-    pub pincode: i64,
-    pub lat: i64,
-    pub long: i64,
-    pub from: String,
-    pub to: String,
-    pub fee_type: String,
-    pub sessions: Vec<Session>,
-    pub vaccine_fees: Option<Vec<VaccineFee>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Session {
-    pub session_id: String,
-    pub date: String,
-    pub available_capacity: i64,
-    pub min_age_limit: i64,
-    pub vaccine: String,
-    pub slots: Vec<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct VaccineFee {
-    pub vaccine: String,
-    pub fee: String,
-}
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "example", about = "An example of StructOpt usage.")]
@@ -56,36 +24,7 @@ struct Opt {
     age: usize,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct StatesResponse {
-    pub states: Vec<State>,
-    pub ttl: i64,
-}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct State {
-    pub state_id: i64,
-    pub state_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DistrictsResponse {
-    pub districts: Vec<District>,
-    pub ttl: i64,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct District {
-    pub district_id: i64,
-    pub district_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct NotificationMessage {
-    pub center_name: String,
-    pub address: String,
-    pub date: String
-}
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
@@ -95,7 +34,7 @@ async fn main() -> Result<(), reqwest::Error> {
     let state_arg = opt.state;
     let states_response = reqwest::get("https://cdn-api.co-vin.in/api/v2/admin/location/states")
         .await?
-        .json::<StatesResponse>()
+        .json::<state::StatesResponse>()
         .await?;
     
     let mut state_id = None;
@@ -109,7 +48,7 @@ async fn main() -> Result<(), reqwest::Error> {
         println!("{}", &state_id);
         let disticts_response = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/admin/location/districts/{}", state_id))
             .await?
-            .json::<DistrictsResponse>()
+            .json::<district::DistrictsResponse>()
             .await?;
 
         let mut district_id = None;
@@ -179,7 +118,7 @@ async fn main() -> Result<(), reqwest::Error> {
                     for center in &resp.centers {
                         for session in &center.sessions  {
                             if session.available_capacity > 0 {
-                                if age2 == 18 && session.vaccine == "COVAXIN" {
+                                if age2 == 18 && session.min_age_limit == 18 {
                                     tx2.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
@@ -212,7 +151,7 @@ async fn main() -> Result<(), reqwest::Error> {
                     for center in &resp.centers {
                         for session in &center.sessions  {
                             if session.available_capacity > 0 {
-                                if age3 == 18 && session.vaccine == "COVAXIN" {
+                                if age3 == 18 && session.min_age_limit == 18 {
                                     tx3.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
@@ -245,7 +184,7 @@ async fn main() -> Result<(), reqwest::Error> {
                     for center in &resp.centers {
                         for session in &center.sessions  {
                             if session.available_capacity > 0 {
-                                if age4 == 18 && session.vaccine == "COVAXIN" {
+                                if age4 == 18 && session.min_age_limit == 18 {
                                     tx4.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
@@ -268,7 +207,6 @@ async fn main() -> Result<(), reqwest::Error> {
             while let Some(message) = rx.recv().await {
                 use notify_rust::Notification;
 
-                println!("something");
                 Notification::new()
                     .summary(format!("{}", message.center_name).as_str())
                     .body(format!("{} - {}", message.date, message.address).as_str())
