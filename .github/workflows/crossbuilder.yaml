@@ -1,0 +1,46 @@
+name: CrossPlatformBuild
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [linux, windows, macos]
+        include:
+          - name: linux
+            os: ubuntu-latest
+            artifact_name: target/release/cowin-notifier
+            asset_name: cowin-notifier-linux
+          - name: windows
+            os: windows-latest
+            artifact_name: target/release/cowin-notifier.exe
+            asset_name: cowin-notifier-windows
+          - name: macos
+            os: macos-latest
+            artifact_name: target/release/cowin-notifier
+            asset_name: cowin-notifier-macos
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+
+      - name: Build
+        run: cargo build --release --locked
+
+      - name: Upload binaries to release
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.artifact_name }}
