@@ -2,6 +2,7 @@ use structopt::StructOpt;
 use chrono::{Local, Duration};
 use tokio::sync::mpsc;
 use tokio::time::sleep;
+use log;
 
 mod district;
 mod state;
@@ -109,7 +110,7 @@ async fn main() -> Result<(), reqwest::Error> {
                 loop {
                     let local = Local::now() + Duration::days(7);
                     let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id2, date))
+                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
                         .await
                         .unwrap()
                         .json::<CentersResponse>()
@@ -118,13 +119,13 @@ async fn main() -> Result<(), reqwest::Error> {
                     for center in &resp.centers {
                         for session in &center.sessions  {
                             if session.available_capacity > 0 {
-                                if age2 == 18 && session.min_age_limit == 18 {
+                                if age == 18 && session.min_age_limit == 18 {
                                     tx2.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
                                         date: session.date.clone()
                                     }).await.ok();
-                                } else if age2 == 45 && session.min_age_limit == 45 {
+                                } else if age == 45 && session.min_age_limit == 45 {
                                     tx2.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
@@ -142,7 +143,7 @@ async fn main() -> Result<(), reqwest::Error> {
                 loop {
                     let local = Local::now() + Duration::days(14);
                     let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id3, date))
+                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
                         .await
                         .unwrap()
                         .json::<CentersResponse>()
@@ -151,13 +152,13 @@ async fn main() -> Result<(), reqwest::Error> {
                     for center in &resp.centers {
                         for session in &center.sessions  {
                             if session.available_capacity > 0 {
-                                if age3 == 18 && session.min_age_limit == 18 {
+                                if age == 18 && session.min_age_limit == 18 {
                                     tx3.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
                                         date: session.date.clone()
                                     }).await.ok();
-                                } else if age3 == 45 && session.min_age_limit == 45 {
+                                } else if age == 45 && session.min_age_limit == 45 {
                                     tx3.send(NotificationMessage {
                                         center_name: center.name.clone(),
                                         address: center.address.clone(),
@@ -174,29 +175,14 @@ async fn main() -> Result<(), reqwest::Error> {
             tokio::spawn(async move {
                 loop {
                     let local = Local::now() + Duration::days(21);
-                    let date = local.format("%d-%m-%Y");
-                    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id4, date))
-                        .await
-                        .unwrap()
-                        .json::<CentersResponse>()
-                        .await
-                        .unwrap();
-                    for center in &resp.centers {
-                        for session in &center.sessions  {
-                            if session.available_capacity > 0 {
-                                if age4 == 18 && session.min_age_limit == 18 {
-                                    tx4.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                } else if age4 == 45 && session.min_age_limit == 45 {
-                                    tx4.send(NotificationMessage {
-                                        center_name: center.name.clone(),
-                                        address: center.address.clone(),
-                                        date: session.date.clone()
-                                    }).await.ok();
-                                }  
+                    let date = local.format("%d-%m-%Y").to_string();
+                    let resp = get_centers(district_id, date).await.ok();
+                    if let Some(resp) = resp {
+                        let notifications = get_notifications(resp, age);
+                        for notif in notifications {
+                            match tx4.send(notif).await {
+                                Ok(()) => {},
+                                Err(e) => log::error!("An error occured: {}. \n Please mail this error message to contact@ieeevit.org, or open an issue at https://github.com/aryan9600/cowin-notifier/issues/new.", e)
                             }
                         }
                     }
@@ -221,4 +207,36 @@ async fn main() -> Result<(), reqwest::Error> {
     } else {
         Ok(())
     }
+}
+
+async fn get_centers(district_id: i64, date: String) -> Result<CentersResponse, reqwest::Error>{
+    let resp = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id={}&date={}", district_id, date))
+        .await?
+        .json::<CentersResponse>()
+        .await?;
+    Ok(resp)
+} 
+
+fn get_notifications(resp: CentersResponse, age: usize) -> Vec<NotificationMessage> {
+    let mut notifications = vec![];
+    for center in &resp.centers {
+        for session in &center.sessions  {
+            if session.available_capacity > 0 {
+                if age == 18 && session.min_age_limit == 18 {
+                    notifications.push(NotificationMessage {
+                        center_name: center.name.clone(),
+                        address: center.address.clone(),
+                        date: session.date.clone()
+                    })
+                } else if age == 45 && session.min_age_limit == 45 {
+                    notifications.push(NotificationMessage {
+                        center_name: center.name.clone(),
+                        address: center.address.clone(),
+                        date: session.date.clone()
+                    })
+                }  
+            }
+        }
+    }
+    notifications
 }
