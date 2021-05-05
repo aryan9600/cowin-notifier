@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 notify-rust = "4"
-daemonize = "0.4.1"
 reqwest = { version = "0.11", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
