@@ -45,7 +45,7 @@ async fn main() -> Result<(), reqwest::Error> {
     }
 
     if let Some(state_id) = state_id {
-        println!("{}", &state_id);
+        println!("State ID: {}", &state_id);
         let disticts_response = reqwest::get(format!("https://cdn-api.co-vin.in/api/v2/admin/location/districts/{}", state_id))
             .await?
             .json::<district::DistrictsResponse>()
@@ -59,7 +59,7 @@ async fn main() -> Result<(), reqwest::Error> {
         }
 
         if let Some(district_id) = district_id {
-            println!("{}", &district_id);
+            println!("District ID: {}", &district_id);
 
             let (tx, mut rx) = mpsc::channel(16);            
             let tx2 = tx.clone();
