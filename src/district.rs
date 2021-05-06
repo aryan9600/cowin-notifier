@@ -11,4 +11,3 @@ pub struct District {
     pub district_id: i64,
     pub district_name: String,
 }
-
