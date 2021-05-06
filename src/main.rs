@@ -1,8 +1,10 @@
 use structopt::StructOpt;
 use chrono::{Local, Duration};
+use std::{fs::OpenOptions, io::{BufReader, BufWriter}};
 use tokio::sync::mpsc;
 use tokio::time::sleep;
 use log;
+use anyhow::Result;
 
 mod district;
 mod state;
@@ -28,7 +30,7 @@ struct Opt {
 
 
 #[tokio::main]
-async fn main() -> Result<(), reqwest::Error> {
+async fn main() -> Result<()> {
     let opt = Opt::from_args();
     let district_arg = opt.district;
     let age = opt.age;
@@ -78,11 +80,13 @@ async fn main() -> Result<(), reqwest::Error> {
                         let date = local.format("%d-%m-%Y").to_string();
                         let resp = get_centers(district_id, date).await.ok();
                         if let Some(resp) = resp {
-                            let notifications = get_notifications(resp, age);
-                            for notif in notifications {
-                                match tx.send(notif).await {
-                                    Ok(()) => {},
-                                    Err(e) => log::error!("{} \n {}", error_msg, e)
+                            let notifications = get_notifications(resp, age).ok();
+                            if let Some(notifications) = notifications {
+                                for notif in notifications {
+                                    match tx.send(notif).await {
+                                        Ok(()) => {},
+                                        Err(e) => log::error!("{} \n {}", error_msg, e)
+                                    }
                                 }
                             }
                         }
@@ -100,7 +104,7 @@ async fn main() -> Result<(), reqwest::Error> {
                     .body(format!("{} - {}", message.date, message.address).as_str())
                     .appname("cowin-notifier")
                     .icon("Toastify")
-                    .show().unwrap();
+                    .show()?;
             }
             Ok(())
         } else {
@@ -119,11 +123,29 @@ async fn get_centers(district_id: i64, date: String) -> Result<CentersResponse, 
     Ok(resp)
 } 
 
-fn get_notifications(resp: CentersResponse, age: usize) -> Vec<NotificationMessage> {
+fn get_notifications(resp: CentersResponse, age: usize) -> Result<Vec<NotificationMessage>> {
     let mut notifications = vec![];
+
+    let file = OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create(true)
+        .append(true)
+        .open("cowin-notifications-logs.json")?;
+    let read_buffer = BufReader::new(&file);
+    let prev_notifs: Vec<NotificationMessage> = serde_json::from_reader(read_buffer)?;
+
     for center in &resp.centers {
         for session in &center.sessions  {
             if session.available_capacity > 0 {
+                let notification = NotificationMessage {
+                    center_name: center.name.clone(),
+                    address: center.address.clone(),
+                    date: session.date.clone()
+                };
+                if prev_notifs.contains(&notification) {
+                    continue;
+                }
                 if age == 18 && session.min_age_limit == 18 {
                     notifications.push(NotificationMessage {
                         center_name: center.name.clone(),
@@ -140,5 +162,9 @@ fn get_notifications(resp: CentersResponse, age: usize) -> Vec<NotificationMessa
             }
         }
     }
-    notifications
+    let mut write_buffer = BufWriter::new(file);
+    for notification in &notifications {
+        serde_json::to_writer(&mut write_buffer, notification)?;
+    }
+    Ok(notifications)
 }
