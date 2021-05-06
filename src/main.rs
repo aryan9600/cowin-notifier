@@ -110,7 +110,7 @@ async fn main() -> Result<()> {
                 use notify_rust::Notification;
 
                 Notification::new()
-                    .summary(format!("{}", message.center_name).as_str())
+                    .summary(message.center_name.as_str())
                     .body(format!("{} - {}", message.date, message.address).as_str())
                     .appname("cowin-notifier")
                     .icon("Toastify")
@@ -171,6 +171,7 @@ fn get_notifications(resp: CentersResponse, age: usize) -> Result<Vec<Notificati
                         address: center.address.clone(),
                         date: session.date.clone(),
                     })
+                } else {
                 }
             }
         }

@@ -4,6 +4,5 @@ use serde::{Deserialize, Serialize};
 pub struct NotificationMessage {
     pub center_name: String,
     pub address: String,
-    pub date: String
+    pub date: String,
 }
-

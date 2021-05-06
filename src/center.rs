@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CentersResponse{
-    pub centers: Vec<Center>
+pub struct CentersResponse {
+    pub centers: Vec<Center>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
