@@ -37,4 +37,4 @@ A cross platform tool which instantly notifies about COVID vaccine availability.
 
 ## Contributing
 
-Please feel free to contribute. The tool is written purely in the Rust Programming Langauge. The code definitely needs some cleanup and refactoring, so please open a PR if you feel up for the task.
+Please feel free to contribute. The tool is written purely in the Rust Programming Langauge. The code definitely needs some cleanup and refactoring, so please open a PR if you feel up for the task. If anyone can figure out how to daemonize this (at least on POSIX) without having to write a systemd file, please go ahead and implement it.
