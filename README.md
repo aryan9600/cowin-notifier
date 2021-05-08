@@ -1,5 +1,7 @@
-# cowin-notifier
-
+# Cowin Notifier
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/aryan9600/cowin-notifier)
+[![GitHub License](https://img.shields.io/github/license/aryan9600/cowin-notifier)](https://github.com/aryan9600/cowin-notifier/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/aryan9600/cowin-notifier/issues/new/choose)
 A cross platform tool which instantly notifies about COVID vaccine availability.
 
 ## Usage
@@ -8,7 +10,7 @@ A cross platform tool which instantly notifies about COVID vaccine availability.
 * [Downlaod the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-windows.zip) and unzip it.
 * Open the folder containing the file, do a `Shift + Right Click` and select "Open Powershell here."
 * Run `./cowin-notifier "state_name", "district_name", "age_group"`
-![Alt text](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/WhatsApp%20Image%202021-05-06%20at%2021.23.49.jpeg)
+![Windows Screenshot](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/WhatsApp%20Image%202021-05-06%20at%2021.23.49.jpeg)
 * Minimize the Powershell window.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Powershell window.__
 
@@ -16,17 +18,17 @@ A cross platform tool which instantly notifies about COVID vaccine availability.
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-macos.zip) and unzip it.
 * Open your terminal and `cd` into your default Downloads directory. macOS users can fire up Spotlight(cmd+Space), search for Terminal and open it.
 
-![Alt text](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2015.59.44.png)
+![macOS Screenshot-1](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2015.59.44.png)
 
 * Run `cd ~/Downloads`
-
+* Run `chmod +x cowin-notifier`
 * Run `./cowin-notifier "state_name", "district_name", "age_group"`
-![Alt text](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2016.06.28.png)
+![macOS Screenshot-2](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2016.06.28.png)
 
 * Minimize your terminal.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Terminal.__
 
-![Alt text](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2017.46.10.png)
+![macOS Screenshot-3](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2017.46.10.png)
 
 ### Linux
 * We use the [reqwest](https://github.com/seanmonstar/reqwest) crate, which has some specific [requirements for Linux](https://github.com/seanmonstar/reqwest#requirements). Please follow them first.
