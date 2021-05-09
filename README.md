@@ -1,5 +1,3 @@
-
-
 # 💉 CoWIN Notifier 😷
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/aryan9600/cowin-notifier)
 [![GitHub License](https://img.shields.io/github/license/aryan9600/cowin-notifier)](https://github.com/aryan9600/cowin-notifier/blob/master/LICENSE)
@@ -7,7 +5,7 @@
 ![release](https://img.shields.io/github/v/release/aryan9600/cowin-notifier)
 ![rust-version](https://img.shields.io/badge/rust-v1.5.2-red)
 
-A cross-platform tool written in rust, which instantly notifies users about COVID-19 vaccine availability at their regions.
+A cross-platform tool written in rust, which instantly notifies users about COVID-19 vaccine availability at their regions. Currently, this tool is only compatible in India.
 
 ## Usage
 
@@ -23,9 +21,12 @@ A cross-platform tool written in rust, which instantly notifies users about COVI
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-macos.zip) and unzip it.
 * Open your terminal and `cd` into your default Downloads directory where you have downloaded the file. macOS users can fire up Spotlight using `cmd + Space`, search for Terminal and open it.
 ![macOS Screenshot-1](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20spotlight.png)
-* Run `cd ~/Downloads` 
-* Run `chmod +x cowin-notifier`
-* Run `./cowin-notifier "state_name" "district_name" "age_group"`
+* Run the following commands in the terminal.
+```
+ cd ~/Downloads 
+chmod +x cowin-notifier
+./cowin-notifier "state_name" "district_name" "age_group"
+```
 ![macOS Screenshot-2](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20notif.png)
 * Minimize your terminal.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Terminal.__
@@ -33,7 +34,7 @@ A cross-platform tool written in rust, which instantly notifies users about COVI
 ![macOS Screenshot-3](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2017.46.10.png)
 
 ### 🐧 Linux
-* We use the [reqwest](https://github.com/seanmonstar/reqwest) crate, which has some specific [requirements for Linux](https://github.com/seanmonstar/reqwest#requirements). Please follow them first.
+* We use the [reqwest](https://github.com/seanmonstar/reqwest) crate, which has some specific [requirements for Linux](https://github.com/seanmonstar/reqwest#requirements). Please install the required dependencies as mentioned.
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-linux.zip) and unzip it.
 * The rest of the usage is similar to macOS.
 
