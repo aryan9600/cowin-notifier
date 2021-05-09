@@ -4,6 +4,7 @@
 [![GitHub License](https://img.shields.io/github/license/aryan9600/cowin-notifier)](https://github.com/aryan9600/cowin-notifier/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/aryan9600/cowin-notifier/issues/new/choose)
 ![release](https://img.shields.io/github/v/release/aryan9600/cowin-notifier)
+![rust-version](https://img.shields.io/badge/rust-v1.5.2-red)
 
 A cross platform tool written in rust, which instantly notifies users about COVID-19 vaccine availability at their regions.
 
@@ -21,12 +22,12 @@ A cross platform tool written in rust, which instantly notifies users about COVI
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-macos.zip) and unzip it.
 * Open your terminal and `cd` into your default Downloads directory. macOS users can fire up Spotlight(cmd+Space), search for Terminal and open it.
 
-![macOS Screenshot-1](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2015.59.44.png)
+![macOS Screenshot-1](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20spotlight.png)
 
 * Run `cd ~/Downloads` 
 * Run `chmod +x cowin-notifier`
-* Run `./cowin-notifier "state_name", "district_name", "age_group"`
-![macOS Screenshot-2](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/Screen%20Shot%202021-05-05%20at%2016.06.28.png)
+* Run `./cowin-notifier "state_name" "district_name" "age_group"`
+![macOS Screenshot-2](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20notif.png)
 
 * Minimize your terminal.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Terminal.__
