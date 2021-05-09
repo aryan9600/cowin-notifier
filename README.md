@@ -1,4 +1,5 @@
 
+
 # 💉 CoWIN Notifier 😷
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/aryan9600/cowin-notifier)
 [![GitHub License](https://img.shields.io/github/license/aryan9600/cowin-notifier)](https://github.com/aryan9600/cowin-notifier/blob/master/LICENSE)
@@ -6,29 +7,26 @@
 ![release](https://img.shields.io/github/v/release/aryan9600/cowin-notifier)
 ![rust-version](https://img.shields.io/badge/rust-v1.5.2-red)
 
-A cross platform tool written in rust, which instantly notifies users about COVID-19 vaccine availability at their regions.
+A cross-platform tool written in rust, which instantly notifies users about COVID-19 vaccine availability at their regions.
 
 ## Usage
 
 ### 💻 Windows
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-windows.zip) and unzip it.
 * Open the folder containing the file, do a `Shift + Right Click` and select "Open Powershell here."
-* Run `./cowin-notifier "state_name", "district_name", "age_group"`
+* Run `./cowin-notifier "state_name" "district_name" "age_group"`
 ![Windows Screenshot](https://raw.githubusercontent.com/aryan9600/cowin-notifier/main/assets/WhatsApp%20Image%202021-05-06%20at%2021.23.49.jpeg)
 * Minimize the Powershell window.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Powershell window.__
 
 ### 🍎 macOS
 * [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-macos.zip) and unzip it.
-* Open your terminal and `cd` into your default Downloads directory. macOS users can fire up Spotlight(cmd+Space), search for Terminal and open it.
-
+* Open your terminal and `cd` into your default Downloads directory where you have downloaded the file. macOS users can fire up Spotlight using `cmd + Space`, search for Terminal and open it.
 ![macOS Screenshot-1](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20spotlight.png)
-
 * Run `cd ~/Downloads` 
 * Run `chmod +x cowin-notifier`
 * Run `./cowin-notifier "state_name" "district_name" "age_group"`
 ![macOS Screenshot-2](https://github.com/mintbomb27/cowin-notifier/raw/main/assets/macOS%20notif.png)
-
 * Minimize your terminal.
 * If a slot opens up for your age group and district, you'll recieve a notification. __Make sure that you don't close the Terminal.__
 
@@ -41,7 +39,7 @@ A cross platform tool written in rust, which instantly notifies users about COVI
 
 > Note: The notification functionality hasn't been tested yet on Linux. Please feel free to play around with the code and test it.
 > 
-> If you're stuck somewhere in between, please check [these commands](https://maker.pro/linux/tutorial/basic-linux-commands-for-beginners) out, and of course google!
+> If you're stuck somewhere in between, please check [these commands](https://maker.pro/linux/tutorial/basic-linux-commands-for-beginners) out, and of course try googling!
 
 ## Contributing
 
