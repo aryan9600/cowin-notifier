@@ -36,7 +36,7 @@ A cross platform tool written in rust, which instantly notifies users about COVI
 
 ### 🐧 Linux
 * We use the [reqwest](https://github.com/seanmonstar/reqwest) crate, which has some specific [requirements for Linux](https://github.com/seanmonstar/reqwest#requirements). Please follow them first.
-* Download the zip file from [here](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-linux.zip) and unzip it.
+* [Download the zip file](https://github.com/aryan9600/cowin-notifier/releases/download/v0.1/cowin-notifier-linux.zip) and unzip it.
 * The rest of the usage is similar to macOS.
 
 > Note: The notification functionality hasn't been tested yet on Linux. Please feel free to play around with the code and test it.
