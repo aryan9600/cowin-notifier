@@ -1,0 +1,134 @@
+{
+    "centers": [
+        {
+            "address": "1st Street",
+            "block_name": "Borough-VII",
+            "center_id": 551967,
+            "district_name": "Kolkata",
+            "fee_type": "Free",
+            "from": "10:00:00",
+            "lat": 22,
+            "long": 88,
+            "name": "Center 1",
+            "pincode": 700014,
+            "sessions": [
+                {
+                    "available_capacity": 8,
+                    "date": "10-05-2021",
+                    "min_age_limit": 45,
+                    "session_id": "ec618449-2c1f-468e-8175-1f4c58d239e6",
+                    "slots": [
+                        "10:00AM-12:00PM"
+                    ],
+                    "vaccine": "COVISHIELD"
+                }
+            ],
+            "state_name": "West Bengal",
+            "to": "17:00:00"
+        },
+        {
+            "address": "2nd Street",
+            "block_name": "Borough-VII",
+            "center_id": 551967,
+            "district_name": "Kolkata",
+            "fee_type": "Free",
+            "from": "10:00:00",
+            "lat": 22,
+            "long": 88,
+            "name": "Center 2",
+            "pincode": 700014,
+            "sessions": [
+                {
+                    "available_capacity": 10,
+                    "date": "10-05-2021",
+                    "min_age_limit": 45,
+                    "session_id": "ec618449-2c1f-468e-8175-1f4c58d239e6",
+                    "slots": [
+                        "10:00AM-12:00PM"
+                    ],
+                    "vaccine": "COVISHIELD"
+                }
+            ],
+            "state_name": "West Bengal",
+            "to": "17:00:00"
+        },
+        {
+            "address": "3rd Street",
+            "block_name": "Borough-VII",
+            "center_id": 551967,
+            "district_name": "Kolkata",
+            "fee_type": "Free",
+            "from": "10:00:00",
+            "lat": 22,
+            "long": 88,
+            "name": "Center 3",
+            "pincode": 700014,
+            "sessions": [
+                {
+                    "available_capacity": 10,
+                    "date": "11-05-2021",
+                    "min_age_limit": 45,
+                    "session_id": "ec618449-2c1f-468e-8175-1f4c58d239e6",
+                    "slots": [
+                        "10:00AM-12:00PM"
+                    ],
+                    "vaccine": "COVISHIELD"
+                }
+            ],
+            "state_name": "West Bengal",
+            "to": "17:00:00"
+        },
+        {
+            "address": "4th Street",
+            "block_name": "Borough-VII",
+            "center_id": 551967,
+            "district_name": "Kolkata",
+            "fee_type": "Free",
+            "from": "10:00:00",
+            "lat": 22,
+            "long": 88,
+            "name": "Center 4",
+            "pincode": 700014,
+            "sessions": [
+                {
+                    "available_capacity": 28,
+                    "date": "11-05-2021",
+                    "min_age_limit": 45,
+                    "session_id": "ec618449-2c1f-468e-8175-1f4c58d239e6",
+                    "slots": [
+                        "10:00AM-12:00PM"
+                    ],
+                    "vaccine": "COVISHIELD"
+                }
+            ],
+            "state_name": "West Bengal",
+            "to": "17:00:00"
+        },
+        {
+            "address": "5th Street",
+            "block_name": "Borough-VII",
+            "center_id": 551967,
+            "district_name": "Kolkata",
+            "fee_type": "Free",
+            "from": "10:00:00",
+            "lat": 22,
+            "long": 88,
+            "name": "Center 5",
+            "pincode": 700014,
+            "sessions": [
+                {
+                    "available_capacity": 0,
+                    "date": "11-05-2021",
+                    "min_age_limit": 45,
+                    "session_id": "ec618449-2c1f-468e-8175-1f4c58d239e6",
+                    "slots": [
+                        "10:00AM-12:00PM"
+                    ],
+                    "vaccine": "COVISHIELD"
+                }
+            ],
+            "state_name": "West Bengal",
+            "to": "17:00:00"
+        }
+    ]
+}
